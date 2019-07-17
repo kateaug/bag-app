@@ -21,13 +21,14 @@ const init = async function(bagId) {
              
         let itemId = item.getAttribute('data-id');
         
-            deleteItem(bagId, itemId); 
+        deleteItem(bagId, itemId); 
 
-            bag.items.reduce(itemFound(itemId), []);
+        bag.items = bag.items.reduce(itemFound(itemId), []);
 
-            productCard[index].remove();
+        productCard[index].remove();
 
-            renderTotal(totalPrice, bag);
+        renderTotal(totalPrice, bag);
+        
         });
     });
 
