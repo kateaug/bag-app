@@ -18,15 +18,16 @@ const init = async function(bagId) {
     removeBtn.forEach( (item, index) => {
         
         item.addEventListener('click', () => {
-            let itemId = item.getAttribute('data-id');
+             
+        let itemId = item.getAttribute('data-id');
         
-                    deleteItem(bagId, itemId) 
-                   
-                   // .pop(updateQuantity(itemId));
-                    //bag.items = bag.items.reduce(getNewItems(itemId), []);
+            deleteItem(bagId, itemId); 
 
-                    productCard[index].remove();
-                    renderTotal(totalPrice, bag);
+            bag.items.reduce(itemFound(itemId), []);
+
+            productCard[index].remove();
+
+            renderTotal(totalPrice, bag);
         });
     });
 
@@ -52,7 +53,7 @@ const deleteItem = async (bagId, itemId) => {
     try {
         await BagService.deleteItemByIdAsync(bagId, itemId);
     } catch (err) {
-        return '<div class="error">Error loading bag items...</div>';
+        return '<div class="error">Error deleting bag items...</div>';
     }
 }
 
@@ -60,13 +61,12 @@ function renderTotal(totalPrice, bag) {
     totalPrice.innerHTML = Math.round(getTotal(bag.items) * 100) / 100;
 }
 
-
-// export function updateQuantity(itemId) {
-//     return (quantityItems, item) => {
-//         if (item.id !== itemId) { quantityItems.push(item); }
-//         return quantityItems;
-//     };
-// }
+export function itemFound(itemId) {
+    return (itemsInBag, item) => {
+        if (item.id !== itemId) { itemsInBag.push(item); }
+        return itemsInBag;
+    };
+}
 
 export function getTotal(items) { 
     let total = items.map(item => item.price).reduce((base, cur) => Number(base) + Number(cur), 0)  
